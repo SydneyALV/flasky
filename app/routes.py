@@ -2,19 +2,19 @@ from flask import Blueprint, jsonify, abort, make_response, request
 from app import db
 from app.models.crystal import Crystal
 
-def validate_crystal(crystal_id):
+def validate_model(cls, model_id):
 
     try: 
-        crystal_id = int(crystal_id)
+        model_id = int(model_id)
     except:
-        abort(make_response(f"Crystal {crystal_id} is invalid. Must be an integer", 400))
+        abort(make_response(f"{cls.__name__} {model_id} is invalid. Must be an integer", 400))
 
-    crystal = Crystal.query.get(crystal_id)
+    model_item = cls.query.get(model_id)
 
-    if not crystal:
-        abort(make_response(f"Crystal {crystal_id} was not found.", 404))
+    if not model_item:
+        abort(make_response(f"Crystal {model_id} was not found.", 404))
 
-    return crystal
+    return model_item
 
 crystal_bp = Blueprint("crystals", __name__, url_prefix="/crystals")
 
@@ -24,11 +24,7 @@ crystal_bp = Blueprint("crystals", __name__, url_prefix="/crystals")
 def handle_crystals():
     request_body = request.get_json()
     
-    new_crystal = Crystal(
-        name = request_body["name"],
-        color = request_body["color"],
-        powers = request_body["powers"]
-    )
+    new_crystal = Crystal.from_dict(request_body)
 
     db.session.add(new_crystal)
     db.session.commit()
@@ -62,7 +58,7 @@ def read_all_crystals():
 def read_one_crystal(crystal_id):
     # validate crystal id
     # query our db
-    crystal = validate_crystal(crystal_id)
+    crystal = validate_model(Crystal, crystal_id)
 
     return crystal.to_dict(), 200
 
@@ -71,9 +67,9 @@ def read_one_crystal(crystal_id):
 
 def update_crystal(crystal_id):
     # validate crystal id
-    # crystal_id = validate_crystal(crystal_id)
+    # crystal_id = validate_model(crystal_id)
 
-    crystal = validate_crystal(crystal_id)
+    crystal = validate_model(Crystal, crystal_id)
 
     request_body = request.get_json()
 
@@ -90,9 +86,9 @@ def update_crystal(crystal_id):
 
 def delete_crystal(crystal_id):
     # validate crystal id
-    # crystal_id = validate_crystal(crystal_id)
+    # crystal_id = validate_model(crystal_id)
 
-    crystal = validate_crystal(crystal_id)
+    crystal = validate_model(Crystal, crystal_id)
 
     db.session.delete(crystal)
     db.session.commit()

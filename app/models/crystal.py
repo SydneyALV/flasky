@@ -13,3 +13,12 @@ class Crystal(db.Model):
             "color": self.color,
             "powers": self.powers
         }
+
+    @classmethod
+    def from_dict(cls, crystal_data):
+        new_crystal = cls(
+            name = crystal_data["name"],
+            color = crystal_data["color"],
+            powers = crystal_data["powers"]
+        )
+        return new_crystal

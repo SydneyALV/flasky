@@ -1,3 +1,5 @@
+from app.models.crystal import Crystal
+
 # Return empty crystal list
 def test_read_all_crystals_returns_empty_list(client):
     # Arrange
