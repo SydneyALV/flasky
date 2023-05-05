@@ -52,12 +52,7 @@ def read_all_crystals():
     crystals_response = []
 
     for crystal in crystals:
-        crystals_response.append({
-            "id": crystal.id,
-            "name": crystal.name,
-            "color": crystal.color,
-            "powers": crystal.powers
-        })
+        crystals_response.append(crystal.to_dict())
 
     return jsonify(crystals_response)
 
@@ -69,12 +64,7 @@ def read_one_crystal(crystal_id):
     # query our db
     crystal = validate_crystal(crystal_id)
 
-    return {
-            "id": crystal.id,
-            "name": crystal.name,
-            "color": crystal.color,
-            "powers": crystal.powers
-        }, 200
+    return crystal.to_dict(), 200
 
 # define a route for updating a single crystal
 @crystal_bp.route("/<crystal_id>", methods=["PUT"])
