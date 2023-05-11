@@ -135,7 +135,7 @@ def create_crystal_by_id(healer_id):
     
     request_body = request.get_json()
 
-    new_crystal = Crystal.from_dict(request_body, healer)
+    new_crystal = Crystal.from_dict()
 
     db.session.add(new_crystal)
     db.session.commit()
