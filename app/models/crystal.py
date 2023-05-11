@@ -17,11 +17,10 @@ class Crystal(db.Model):
         }
 
     @classmethod
-    def from_dict(cls, crystal_data, healer):
+    def from_dict(cls, crystal_data):
         new_crystal = cls(
             name = crystal_data["name"],
             color = crystal_data["color"],
-            powers = crystal_data["powers"],
-            healer = healer
+            powers = crystal_data["powers"]
         )
         return new_crystal
