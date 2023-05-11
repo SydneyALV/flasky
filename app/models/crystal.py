@@ -5,6 +5,8 @@ class Crystal(db.Model):
     name = db.Column(db.String)
     color = db.Column(db.String)
     powers = db.Column(db.String)
+    healer_id = db.Column(db.Integer, db.ForeignKey('healer.id'))
+    healer = db.relationship("Healer", back_populates="crystals")
 
     def to_dict(self):
         return {
@@ -15,10 +17,11 @@ class Crystal(db.Model):
         }
 
     @classmethod
-    def from_dict(cls, crystal_data):
+    def from_dict(cls, crystal_data, healer):
         new_crystal = cls(
             name = crystal_data["name"],
             color = crystal_data["color"],
-            powers = crystal_data["powers"]
+            powers = crystal_data["powers"],
+            healer = healer
         )
         return new_crystal
